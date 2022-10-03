@@ -1,8 +1,35 @@
-{% extends 'base.html' %}
-{% block content %}
-<div class = "container">
-    <h1 class = "text-center">{{query.title}}</h1>
-    <br/>
-    <p>{{query.description|safe}}</p>
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+  <h1 class="text-center">{{query.title}}</h1>
+  <br />
+    <div class="container-fluid border border-dark" style = "overflow-y: auto;height: 400px;">
+        <div class="subtitle text-muted py-1">By : {{query.user.email}}</div>
+        <div class="subtitle text-muted py-1">Created On : {{query.date_of_creation}}</div>
+        <div class="subtitle text-muted py-1">Type : {{query.type}}</div>
+        <div class="subtitle text-muted py-1">Status : {{query.status}}</div>
+        <div class="subtitle text-muted py-1 text-center">Description</div>
+            <p>
+                {{query.media}} 
+                {{query.description|safe}}
+            </p>
+    </div>
+    {% if user.profile.role == "Program Representative" %}
+        <div class = "d-inline-block py-2">
+            <div class = "row">
+                <div class = "col">
+                    <form method = "POST" action = "{% url 'approve_query' query.id query.slug %}" style = "margin-bottom:20px;">
+                        {% csrf_token %}
+                        <button class = "btn btn-outline-success" type = "submit">Approve</button>
+                    </form>
+                </div>
+                <div class = "col">
+                    <form method = "POST" action = "{% url 'reject_query' query.id query.slug %}">
+                        {% csrf_token %}
+                        <button class = "btn btn-outline-danger" type = "submit">Reject</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
