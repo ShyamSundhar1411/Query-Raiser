@@ -30,7 +30,7 @@ class Query(models.Model):
     type = models.CharField(max_length = 100)
     slug = AutoSlugField(populate_from = "title",unique=True,blank = True,editable = True)
     def __str__(self):
-        self.title
+        return self.title
 @receiver(post_save,sender = User)
 def create_profile(sender,instance,created,**kwargs):
     if created:

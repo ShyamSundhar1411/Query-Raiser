@@ -6,14 +6,20 @@
     <ul class="list-group">
         {% if Queries %}
         {% for query in Queries.all %}
-        <li class="list-group-item list-group-item-primary">A simple primary list group item</li>
+        {% if query.status == "Pending Approval" %}
+            <li class="list-group-item list-group-item-info">{{query.title}}</li>
+        {% elif query.status == "Rejected" %}
+            <li class="list-group-item list-group-item-danger">A simple primary list group item</li>
+        {% else %}
+            <li class="list-group-item list-group-item-success">A simple primary list group item</li>
+        {% endif %}
         {% endfor %}
         {% else %}
             <h1 class = "text-center">You have No Queries Posted !!!. Get Started</h1>
         {% endif %}
     </ul>
-    <div class = "d-inline-block">
-        <a class = "btn btn-primary" data-bss-hover-animate="pulse"><i class="fa-solid fa-plus"></i> Add a Query</a>
+    <div class = "d-inline-block py-2" style = "margin-top:20px;margin-bottom:10px;">
+        <a href = "{% url 'create_query' %}" class = "btn btn-primary" data-bss-hover-animate="pulse"><i class="fa-solid fa-plus"></i> Add a Query</a>
     </div>
 </div>
 {% endblock %}

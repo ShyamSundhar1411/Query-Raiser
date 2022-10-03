@@ -23,7 +23,8 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.home,name = "home"),
+    path('services/',include("services.urls")),
     path('tinymce/',include("tinymce.urls")),
-    path('logout/',auth_views.LogoutView.as_view(),name = "logout")
+    path('logout/',auth_views.LogoutView.as_view(),name = "logout"),
 ]
 urlpatterns+=static(settings.STATIC_URL,document_root = settings.STATIC_ROOT)

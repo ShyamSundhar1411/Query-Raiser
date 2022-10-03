@@ -1,7 +1,8 @@
 
 from .models import Query
 from . forms import QueryCreateForm
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import render,redirect
 
 # Create your views here.
 def home(request):
@@ -16,3 +17,9 @@ def create_query(request):
             query.user = request.user
             query.status = "Pending Approval"
             query.save()
+            messages.success(request,"Successfully raised a query. You will be notified about the status soon")
+            return redirect("home")
+        else:
+            return render(request,"services/create_query.html",{"form":query_form,"hostride_form_errors":query_form.errors})
+    else:
+        return render(request,"services/create_query.html",{"form":QueryCreateForm()})
