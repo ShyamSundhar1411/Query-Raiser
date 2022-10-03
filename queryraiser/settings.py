@@ -55,7 +55,7 @@ ROOT_URLCONF = 'queryraiser.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['queryraiser/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
