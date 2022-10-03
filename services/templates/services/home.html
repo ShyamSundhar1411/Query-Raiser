@@ -7,11 +7,11 @@
         {% if Queries %}
         {% for query in Queries.all %}
         {% if query.status == "Pending Approval" %}
-            <li class="list-group-item list-group-item-info">{{query.title}}</li>
+            <a href = "{% url 'query_detail_view' query.slug query.id %}" class="list-group-item list-group-item-action list-group-item-info">{{query.title}}</a>
         {% elif query.status == "Rejected" %}
-            <li class="list-group-item list-group-item-danger">A simple primary list group item</li>
+            <a href = "{% url 'query_detail_view' query.slug query.id %}" class="list-group-item list-group-item-action list-group-item-danger">A simple primary list group item</a>
         {% else %}
-            <li class="list-group-item list-group-item-success">A simple primary list group item</li>
+            <a href = "{% url 'query_detail_view' query.slug  query.id %}" class="list-group-item list-group-item-action list-group-item-success">A simple primary list group item</a>
         {% endif %}
         {% endfor %}
         {% else %}
