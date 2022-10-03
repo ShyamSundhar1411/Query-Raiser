@@ -7,6 +7,8 @@ authors = ["Your Name <you@example.com>"]
 [tool.poetry.dependencies]
 python = "^3.10"
 Django = "^4.1.1"
+django-tinymce = "^3.5.0"
+django-autoslug = "^1.9.8"
 
 [tool.poetry.dev-dependencies]
 
