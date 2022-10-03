@@ -12,3 +12,7 @@ DEPARTMENT_CHOICES = [
     ("Computer Science and Engineering with Specialisation in Business Analytics - MIA","Computer Science and Engineering with Specialisation in Business Analytics - MIA")
     
 ]
+ROLE_CHOICES = [
+    ("Program Representative","Program Representative"),
+    ("Student","Student"),
+]

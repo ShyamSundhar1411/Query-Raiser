@@ -12,6 +12,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     contact = PhoneNumberField(blank = True)
+    role = models.CharField(max_length = 100,choices = ROLE_CHOICES,blank = True, null=True)
     slug = models.SlugField(blank=True)
     def __str__(self):
         return self.user.username
