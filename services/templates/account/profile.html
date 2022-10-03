@@ -20,7 +20,7 @@
                     <p class = "card-text profile-text">Email : {{user.email|truncatechars:20}}</p>
                     <p class = "card-text profile-text">First Name : {{user.first_name}}</p>
                     <p class = "card-text profile-text">Reg No : {{user.last_name}}</p>
-                    <p class = "card-text profile-text">Deparment : {{user.profile.department|truncatechars:20}}</p>
+                    <p class = "card-text profile-text">Deparment : {% if user.profile.department %}{{user.profile.department|truncatechars:20}}{% else %}Profile Under Verification{% endif %}</p>
                 </div>
             </div>
             <div class="col-md-8">
@@ -49,6 +49,9 @@
                             </div>
                             <div class = "col">
                                 {{profile_form.role|as_crispy_field}}
+                            </div>
+                            <div class = "col">
+                                {{profile_form.admitted_year|as_crispy_field}}
                             </div>
                         </div>
                         <div class="row form-row">

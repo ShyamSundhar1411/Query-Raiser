@@ -4,9 +4,13 @@
   <br />
     <div class="container-fluid border border-dark" style = "overflow-y: auto;height: 400px;">
         <div class="subtitle text-muted py-1">By : {{query.user.email}}</div>
+        <div class="subtitle text-muted py-1">Roll No : {{query.user.last_name}}</div>
         <div class="subtitle text-muted py-1">Created On : {{query.date_of_creation}}</div>
         <div class="subtitle text-muted py-1">Type : {{query.type}}</div>
         <div class="subtitle text-muted py-1">Status : {{query.status}}</div>
+        {% if user.profile.role == "Program Representative" %}
+            <div class="subtitle text-muted py-1">Contact : {{query.user.profile.contact}}</div>
+        {% endif %}
         <div class="subtitle text-muted py-1 text-center">Description</div>
             <p>
                 {{query.media}} 

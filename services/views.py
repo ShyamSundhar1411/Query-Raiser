@@ -1,4 +1,5 @@
 
+from services.aiding_functions import admitted_year_finder
 from . models import *
 from . forms import *
 from django.contrib import messages
@@ -25,8 +26,10 @@ def landing_page(request):
         return redirect("portal")
     return render(request,"services/landing_page.html")
 def home(request):
-    
-    queries = Query.objects.filter(user = request.user).order_by('-date_of_creation')
+    if request.user.profile.role == "Program Representative":
+        queries = queries = Query.objects.all().order_by('-date_of_creation')
+    else:
+        queries = Query.objects.filter(user = request.user).order_by('-date_of_creation')
     return render(request,"services/home.html",{"Queries":queries})
 
 def create_query(request):
@@ -39,6 +42,8 @@ def create_query(request):
             query = query_form.save(commit=False)
             query.user = request.user
             query.status = "Pending Approval"
+            query.department = request.user.profile.department
+            query.admitted_year = request.user.profile.admitted_year
             query.save()
             messages.success(request,"Successfully raised a query. You will be notified about the status soon")
             return redirect("portal")
@@ -76,8 +81,9 @@ def profile(request,slug):
             if(request.user.profile.department == ""):
                 profile_form_copy = profile_form.save(commit = False)
                 department = department_finder(request.user.last_name)
-                print(department)
+                admitted_year = admitted_year_finder(request.user.last_name)
                 profile_form_copy.department = department
+                profile_form_copy.admitted_year = admitted_year
                 user_form.save()
                 profile_form_copy.save()
             else:

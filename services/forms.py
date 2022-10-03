@@ -6,7 +6,7 @@ from phonenumber_field.formfields import PhoneNumberField
 class QueryCreateForm(forms.ModelForm):
     class Meta:
         model = Query
-        fields = ['title','type','description','department']
+        fields = ['title','type','description']
 class UserForm(forms.ModelForm):
     username = forms.CharField(disabled=True)
     email = forms.CharField(disabled=True)
@@ -18,7 +18,8 @@ class UserForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     contact = PhoneNumberField(required = True)
     role = forms.CharField(disabled=True)
-    department = forms.CharField(disabled=True,required=False)     
+    department = forms.CharField(disabled=True,required=False)    
+    admitted_year = forms.CharField(disabled=True,required=False) 
     class Meta:
         model = Profile
-        fields = ['role','contact','department']
+        fields = ['role','contact','department','admitted_year']

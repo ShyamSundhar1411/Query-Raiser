@@ -15,7 +15,8 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     contact = PhoneNumberField(blank = True)
     role = models.CharField(max_length = 100,choices = ROLE_CHOICES,blank = True, null=True)
-    department = models.CharField(max_length = 500,choices = DEPARTMENT_CHOICES,null=True,)
+    department = models.CharField(max_length = 500,choices = DEPARTMENT_CHOICES,null=True)
+    admitted_year = models.CharField(max_length = 500,null=True)
     slug = models.SlugField(blank=True)
     def __str__(self):
         return self.user.username
@@ -30,6 +31,7 @@ class Query(models.Model):
     status = models.CharField(max_length = 200,choices = STATUS_CHOICES)
     description = HTMLField()
     department = models.CharField(max_length = 200,choices = DEPARTMENT_CHOICES)
+    admitted_year = models.CharField(max_length = 200)
     type = models.CharField(max_length = 100)
     slug = AutoSlugField(populate_from = "title",unique=True,blank = True,editable = True)
     def __str__(self):
@@ -37,7 +39,6 @@ class Query(models.Model):
 @receiver(post_save,sender = User)
 def create_profile(sender,instance,created,**kwargs):
     if created:
-        
         Profile.objects.create(user = instance,role = "Student")
         instance.profile.save()
 @receiver(post_save, sender = User)
