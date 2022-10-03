@@ -30,6 +30,9 @@ def home(request):
     return render(request,"services/home.html",{"Queries":queries})
 
 def create_query(request):
+    if request.user.profile.contact == None or request.user.profile.department == None:
+        messages.info(request,"Verify your profile by adding your contact before posting the query")
+        return redirect("profile",slug=request.user.profile.slug)
     if request.method == "POST":
         query_form = QueryCreateForm(request.POST)
         if query_form.is_valid():
@@ -70,9 +73,10 @@ def profile(request,slug):
         user_form = UserForm(request.POST,instance = request.user)
         profile_form = ProfileForm(request.POST,request.FILES,instance = request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
-            if(request.user.profile.department == None):
+            if(request.user.profile.department == ""):
                 profile_form_copy = profile_form.save(commit = False)
                 department = department_finder(request.user.last_name)
+                print(department)
                 profile_form_copy.department = department
                 user_form.save()
                 profile_form_copy.save()
