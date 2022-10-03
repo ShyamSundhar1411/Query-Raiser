@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
     <title>VRaise</title>
   </head>
   <body>
@@ -49,14 +50,14 @@
                   {{user.username}}
                 </a>
                 <ul class="dropdown-menu dropdown-content" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href=""><i class="far fa-user-circle"></i> My Account</a></li>
+                  <li><a class="dropdown-item" href="{% url 'profile' user.profile.slug %}"><i class="far fa-user-circle"></i> My Account</a></li>
                   <li><a class="dropdown-item" href=""><i class="fas fa-book-open"></i> View All Queries</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" href="{% url 'logout' %}">Logout <i class="fas fa-sign-out-alt"></i></a></li>
                 </ul>
               </li>
               {% else %}
-              <a class = "nav-link" href = "">Login</a>
+              <a class = "nav-link active" data-bss-hover-animate="pulse" href="{% url 'social:begin' 'google-oauth2' %}">Login</a>
             {% endif %}
             </ul>
             </div>
