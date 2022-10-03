@@ -17,7 +17,8 @@ class UserForm(forms.ModelForm):
         fields = ['username','email','first_name','last_name']
 class ProfileForm(forms.ModelForm):
     contact = PhoneNumberField(required = True)
-    role = forms.CharField(disabled=True)    
+    role = forms.CharField(disabled=True)
+    department = forms.CharField(disabled=True,required=False)     
     class Meta:
         model = Profile
-        fields = ['role','contact']
+        fields = ['role','contact','department']

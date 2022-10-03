@@ -1,5 +1,7 @@
 import uuid
 from unittest.util import _MAX_LENGTH
+
+from services.aiding_functions import department_finder
 from .choices import *
 from django.db import models
 from autoslug import AutoSlugField
@@ -13,6 +15,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     contact = PhoneNumberField(blank = True)
     role = models.CharField(max_length = 100,choices = ROLE_CHOICES,blank = True, null=True)
+    department = models.CharField(max_length = 500,choices = DEPARTMENT_CHOICES,null=True,)
     slug = models.SlugField(blank=True)
     def __str__(self):
         return self.user.username
@@ -34,6 +37,7 @@ class Query(models.Model):
 @receiver(post_save,sender = User)
 def create_profile(sender,instance,created,**kwargs):
     if created:
+        
         Profile.objects.create(user = instance,role = "Student")
         instance.profile.save()
 @receiver(post_save, sender = User)
