@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'cloudinary_storage',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     'social_django',
     'django_filters',
     'django_celery_results',
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -86,8 +88,12 @@ WSGI_APPLICATION = 'queryraiser.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE':'django.db.backends.postgresql_psycopg2',
+        'NAME':os.getenv('DB_NAME'),
+        'USER':os.getenv('DB_USER'),
+        'PASSWORD':os.getenv('DB_PASSWORD'),
+        'HOST':os.getenv('DB_HOST'),
+        'PORT':5432,
     }
 }
 
@@ -132,7 +138,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'queryraiser/static',
 ]
-
+STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -213,3 +219,10 @@ EMAIL_HOST_USER = env.str('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = env.int('EMAIL_PORT')
 DEFAULT_FROM_EMAIL = 'PR Team VIT Chennai <noreply@queryraiser.com>'
+#Storages
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': env.str('CLOUD_NAME'),
+    'API_KEY': env.str('API_KEY'),
+    'API_SECRET': env.str('API_SECRET')
+}
+STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
