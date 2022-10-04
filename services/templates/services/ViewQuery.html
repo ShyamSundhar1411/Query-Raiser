@@ -27,60 +27,62 @@
   {% if user.profile.role == "Program Representative" %}
     {% if user.profile.department != query.department or user.profile.admitted_year != query.admitted_year %}
       <h6 class = "text-center text-muted">*You Do Not have permissions to make changes to this query. Kindly Contact {{query.department}} - {{query.admitted_year}} PR for further actions</h6>
-    {% endif %}
-  <div class="d-inline-block py-2">
-    <div class="row">
-      <div class="col">
-        <form
-          method="POST"
-          action="{% url 'approve_query' query.id query.slug %}"
-          style="margin-bottom: 20px"
-        >
-          {% csrf_token %}
-        <button class="btn btn-outline-success " disabled = {% if user.profile.department != query.department or user.profile.admitted_year != query.admitted_year %}true{% else %}false{% endif %} type="submit">Approve</button>
-        </form>
-      </div>
-      <div class="col">
-        <form
-          method="POST"
-          action="{% url 'reject_query' query.id query.slug %}"
-        >
-          {% csrf_token %}
-          <button class="btn btn-outline-danger" type="submit" disabled = {% if user.profile.department != query.department or user.profile.admitted_year != query.admitted_year %}true{% else %}false{% endif %}>Reject</button>
-        </form>
-      </div>
-      <div class = "col" style = "margin-bottom: 20px;" hidden = {% if user.profile.department != query.department or user.profile.admitted_year != query.admitted_year %}true{% else %}false{% endif %}>
-        <div class="dropdown">
-            <a
-              class="dropdown-toggle text-decoration-none btn border border-primary"
-              type="button"
-              id="dropdownMenuButton1"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
+      {% else%}
+      <div class="d-inline-block py-2">
+        <div class="row">
+          <div class="col">
+            <form
+              method="POST"
+              action="{% url 'approve_query' query.id query.slug %}"
+              style="margin-bottom: 20px"
             >
-              <i class="fa-regular fa-address-card"></i> Contact
-            </a>
-            <ul
-              class="dropdown-menu dropdown-content"
-              aria-labelledby="dropdownMenuButton1"
-            >
-              <li>
-                <a
-                  class="dropdown-item"
-                  href="https://wa.me/{{query.user.profile.contact|cut:' '}}"
-                  target="_blank"
-                  ><i class="fa-brands fa-whatsapp"></i> Whatsapp</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" href="mailto:{{query.user.email}}"
-                  ><i class="fa-solid fa-envelope"></i> Mail</a
-                >
-              </li>
-            </ul>
+              {% csrf_token %}
+            <button class="btn btn-outline-success "  type="submit">Approve</button>
+            </form>
           </div>
-      </div>
-    </div>
+          <div class="col">
+            <form
+              method="POST"
+              action="{% url 'reject_query' query.id query.slug %}"
+            >
+              {% csrf_token %}
+              <button class="btn btn-outline-danger" type="submit" >Reject</button>
+            </form>
+          </div>
+          <div class = "col" style = "margin-bottom: 20px;">
+            <div class="dropdown">
+                <a
+                  class="dropdown-toggle text-decoration-none btn border border-primary"
+                  type="button"
+                  id="dropdownMenuButton1"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <i class="fa-regular fa-address-card"></i> Contact
+                </a>
+                <ul
+                  class="dropdown-menu dropdown-content"
+                  aria-labelledby="dropdownMenuButton1"
+                >
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="https://wa.me/{{query.user.profile.contact|cut:' '}}"
+                      target="_blank"
+                      ><i class="fa-brands fa-whatsapp"></i> Whatsapp</a
+                    >
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="mailto:{{query.user.email}}"
+                      ><i class="fa-solid fa-envelope"></i> Mail</a
+                    >
+                  </li>
+                </ul>
+              </div>
+          </div>
+        </div>
+    {% endif %}
+  
   {% endif %}
   <div class="container">
     <a

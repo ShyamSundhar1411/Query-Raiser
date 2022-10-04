@@ -3,6 +3,7 @@
 from . models import *
 from . forms import *
 from . filters import *
+from . tasks import *
 from django.db.models import Q
 from django.contrib import messages
 from django.views import generic
@@ -64,6 +65,7 @@ def approve_query(request,pk,slug):
         query.status = "Approved"
         query.save()
         messages.success(request,"Approved Query successfully")
+        approval_mail(query)
         return redirect("portal")
     else:
         messages.error(request,"Error Processing Request")
@@ -74,6 +76,7 @@ def reject_query(request,pk,slug):
         query.status = "Rejected"
         query.save()
         messages.success(request,"Rejected Query successfully")
+        rejection_mail(query)
         return redirect("portal")
     else:
         messages.error(request,"Error Processing Request")
