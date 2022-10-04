@@ -135,11 +135,14 @@ USE_TZ = True
 #Static Serves
 STATIC_ROOT = os.path.join(BASE_DIR,'static')
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR/'media'# or any prefix you choose
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 STATICFILES_DIRS = [
     BASE_DIR / 'queryraiser/static',
 ]
 STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
-
+#Media
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
@@ -225,7 +228,6 @@ CLOUDINARY_STORAGE = {
     'API_KEY': env.str('API_KEY'),
     'API_SECRET': env.str('API_SECRET')
 }
-STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
 CSRF_TRUSTED_ORIGINS = [
     'https://queryraiservitc.azurewebsites.net'
 ]
