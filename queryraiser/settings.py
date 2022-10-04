@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'crispy_forms',
     'social_django',
+    'django_filters'
 ]
 
 MIDDLEWARE = [

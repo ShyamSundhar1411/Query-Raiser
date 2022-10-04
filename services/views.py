@@ -2,6 +2,7 @@
 
 from . models import *
 from . forms import *
+from . filters import *
 from django.db.models import Q
 from django.contrib import messages
 from django.views import generic
@@ -104,7 +105,7 @@ def profile(request,slug):
         return render(request,'account/profile.html',{'user_form':user_form,'profile_form':profile_form})
 def view_all_queries(request):
     if is_program_representative(request.user):
-        queries = Query.objects.filter(department = request.user.profile.department).order_by("-date_of_creation")
+        queries = QueryFilter(request.GET,queryset = Query.objects.all().order_by('-date_of_creation'))
     else:
-        queries = Query.objects.filter(user = request.user).order_by('-date_of_creation')
+        queries = QueryFilter(request.GET,queryset = Query.objects.filter(user = request.user).order_by('-date_of_creation'))
     return render(request,'services/view_all_queries.html',{"Queries":queries})

@@ -25,6 +25,9 @@
     <p>{{query.description.media}} {{query.description|safe}}</p>
   </div>
   {% if user.profile.role == "Program Representative" %}
+    {% if user.profile.department != query.department or user.profile.admitted_year != query.admitted_year %}
+      <h6 class = "text-center text-muted">*You Do Not have permissions to make changes to this query. Kindly Contact {{query.department}} - {{query.admitted_year}} PR for further actions</h6>
+    {% endif %}
   <div class="d-inline-block py-2">
     <div class="row">
       <div class="col">
@@ -34,7 +37,7 @@
           style="margin-bottom: 20px"
         >
           {% csrf_token %}
-          <button class="btn btn-outline-success" type="submit">Approve</button>
+        <button class="btn btn-outline-success " disabled = {% if user.profile.department != query.department or user.profile.admitted_year != query.admitted_year %}true{% else %}false{% endif %} type="submit">Approve</button>
         </form>
       </div>
       <div class="col">
@@ -43,10 +46,10 @@
           action="{% url 'reject_query' query.id query.slug %}"
         >
           {% csrf_token %}
-          <button class="btn btn-outline-danger" type="submit">Reject</button>
+          <button class="btn btn-outline-danger" type="submit" disabled = {% if user.profile.department != query.department or user.profile.admitted_year != query.admitted_year %}true{% else %}false{% endif %}>Reject</button>
         </form>
       </div>
-      <div class = "col" style = "margin-bottom: 20px;">
+      <div class = "col" style = "margin-bottom: 20px;" hidden = {% if user.profile.department != query.department or user.profile.admitted_year != query.admitted_year %}true{% else %}false{% endif %}>
         <div class="dropdown">
             <a
               class="dropdown-toggle text-decoration-none btn border border-primary"
