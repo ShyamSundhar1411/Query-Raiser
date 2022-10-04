@@ -24,6 +24,11 @@
       font-size: 12px !important;
     }
   }
+  @media screen and (max-width: 1200px) {
+    .disclaimer{
+      font-size:12px !important;
+    }
+  }
 .dropdown-content {
   display: none;
   position: absolute;
@@ -53,4 +58,14 @@
 .margin-bottom {
   margin-bottom: 5px;
   vertical-align: baseline;
+}
+.btn-grad{
+  background: #74ebd5;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #ACB6E5, #74ebd5);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #ACB6E5, #74ebd5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  
+}
+.disclaimer{
+  font-family: Acme, sans-serif;
+  font-size: 20px;
 }

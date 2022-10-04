@@ -17,6 +17,7 @@
     <link rel="icon" href="{% static 'letter-q.png' %}" sizes="32x32" type="image/png">
     <link rel="icon" href="{% static 'letter-q.png' %}" sizes="16x16" type="image/png">
     <link rel="mask-icon" href="{% static 'letter-q.png' %}" color="#563d7c">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Acme&amp;display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
@@ -72,7 +73,7 @@
     <footer class="text-muted">
       <div class="container text-center">
         <p class='text-body'>
-          <a href = "{% url 'portal' %}" class = 'text-muted footer-text'>Copyrights © Shyam  {% now "Y" %}</a>
+          <a href = "{% url 'portal' %}" class = 'text-muted' style = "text-decoration:none;">Copyrights © Shyam  {% now "Y" %}</a>
         </div>
       </div>
     </footer>
@@ -81,6 +82,7 @@
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <script src="{% static 'bs-init.js' %}"></script>
   </body>
 </html>

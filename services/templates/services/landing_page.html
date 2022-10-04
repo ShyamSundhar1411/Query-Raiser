@@ -1,6 +1,42 @@
-{% extends 'base.html' %}
-{% block content %}
-<div class = "container">
-    
+{% extends 'base.html' %} 
+{% block content %} 
+{% load static %}
+<div class="container">
+  <div class="row" style="margin-top: 100px">
+    <div class="col-md-6" style="padding: 50px">
+      <h1 style="font-size: 30px; width: 270px">Query Raiser</h1>
+      <br/>
+      <p class="disclaimer">
+        This is an initiative of SCOPE Program Representatives to facilitate engagement with their peers.<br/>This Query Raiser will assist peers in submitting queriesto their particular Program Representatives, who will then forward these queries to higher authorities for clarifications.<br/>
+        Users are asked to sign in with their Google accounts (VIT Mail) and provide the necessary credentials before submitting their queries and receiving progress updates. <br/>
+        <span class="text-muted"
+          >*Note* : Login with Google to continue using the query raiser</span>
+        >
+      </p>
+
+      <a
+        href="{% url 'social:begin' 'google-oauth2' %}"
+        class="btn btn-outline-primary "
+      >
+        <img
+          src="{% static 'Google.png' %}"
+          alt="Gary Simon Avatar"
+          height="30"
+          width="30"
+        />
+        <span>Login with Google</span>
+      </a>
+    </div>
+    <div class="col-md-6">
+        <div class = "row">
+            <div class = 'col'>
+                <lottie-player src="https://assets3.lottiefiles.com/private_files/lf30_sm5o0rij.json"  background="transparent"  speed="1"  style="width: auto; height: auto;"  loop  autoplay></lottie-player>
+            </div>
+            <div class = "col">
+                <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_sgrmh9rd.json"  background="transparent"  speed="1"  style="width: auto; height: auto;"  loop  autoplay></lottie-player>
+            </div>
+        </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
