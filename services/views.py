@@ -1,13 +1,14 @@
 
-from services.aiding_functions import admitted_year_finder
+
 from . models import *
 from . forms import *
+from django.db.models import Q
 from django.contrib import messages
 from django.views import generic
 from django.http.response import Http404, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render,redirect
-
+from . aiding_functions import admitted_year_finder, is_program_representative
 
 # Create your views here.
 #Class Based Views
@@ -17,7 +18,7 @@ class QueryDetailView(generic.DetailView):
     fields = ['title','description','date_of_creation','user','type','department']
     def get_object(self):
         query = super(QueryDetailView,self).get_object()
-        if  (query.user == self.request.user) or (self.request.user.profile.role == "Program Representative"):
+        if  (query.user == self.request.user) or (is_program_representative(self.request.user)):
             return query
         raise Http404
 #Function Based Views
@@ -26,11 +27,15 @@ def landing_page(request):
         return redirect("portal")
     return render(request,"services/landing_page.html")
 def home(request):
-    if request.user.profile.role == "Program Representative":
-        queries = queries = Query.objects.all().order_by('-date_of_creation')
+    if request.user.profile.department == None or request.user.profile.contact == None:
+        messages.info(request,"Verify your account by adding Contact Number before proceeding to the portal")
+        return redirect("profile",slug = request.user.profile.slug)
     else:
-        queries = Query.objects.filter(user = request.user).order_by('-date_of_creation')
-    return render(request,"services/home.html",{"Queries":queries})
+        if is_program_representative(request.user):
+            queries = queries = Query.objects.filter(department = request.user.profile.department,admitted_year = request.user.profile.admitted_year).order_by('-date_of_creation','status')
+        else:
+            queries = Query.objects.filter(Q(status = "Pending Approval")|Q(status = "Approved"),user = request.user).order_by('-date_of_creation')
+        return render(request,"services/home.html",{"Queries":queries})
 
 def create_query(request):
     if request.user.profile.contact == None or request.user.profile.department == None:
@@ -54,21 +59,21 @@ def create_query(request):
 
 def approve_query(request,pk,slug):
     query = Query.objects.get(id = pk,slug = slug)
-    if request.method == "POST" and request.user.profile.role == "Program Representative":
+    if request.method == "POST" and is_program_representative(request.user):
         query.status = "Approved"
         query.save()
         messages.success(request,"Approved Query successfully")
-        return redirect("query_detail_view",pk = pk,slug = slug)
+        return redirect("portal")
     else:
         messages.error(request,"Error Processing Request")
         return redirect("query_detail_view",pk = pk,slug = slug)
 def reject_query(request,pk,slug):
     query = Query.objects.get(id = pk,slug = slug)
-    if request.method == "POST" and request.user.profile.role == "Program Representative":
+    if request.method == "POST" and is_program_representative(request.user):
         query.status = "Rejected"
         query.save()
         messages.success(request,"Rejected Query successfully")
-        return redirect("query_detail_view",pk = pk,slug = slug)
+        return redirect("portal")
     else:
         messages.error(request,"Error Processing Request")
         return redirect("query_detail_view",pk = pk,slug = slug)
@@ -97,3 +102,9 @@ def profile(request,slug):
         user_form = UserForm(instance = request.user)
         profile_form = ProfileForm(instance = request.user.profile)
         return render(request,'account/profile.html',{'user_form':user_form,'profile_form':profile_form})
+def view_all_queries(request):
+    if is_program_representative(request.user):
+        queries = Query.objects.filter(department = request.user.profile.department).order_by("-date_of_creation")
+    else:
+        queries = Query.objects.filter(user = request.user).order_by('-date_of_creation')
+    return render(request,'services/view_all_queries.html',{"Queries":queries})
