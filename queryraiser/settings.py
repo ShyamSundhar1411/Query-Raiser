@@ -226,3 +226,6 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': env.str('API_SECRET')
 }
 STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
+CSRF_TRUSTED_ORIGINS = [
+    'https://queryraiservitc.azurewebsites.net'
+]
