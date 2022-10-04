@@ -231,3 +231,4 @@ CLOUDINARY_STORAGE = {
 CSRF_TRUSTED_ORIGINS = [
     'https://queryraiservitc.azurewebsites.net'
 ]
+TINYMCE_JS_URL = "https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js";
