@@ -148,6 +148,7 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #Tinymce
 TINYMCE_DEFAULT_CONFIG = {
+    "themes":"silver",
     "menubar": "file edit view insert format tools table help",
     "plugins": "advlist autoresize autolink lists link image charmap print preview anchor searchreplace visualblocks code "
     "fullscreen insertdatetime media table paste code help wordcount emoticons spellchecker",
