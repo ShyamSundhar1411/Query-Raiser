@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'crispy_forms',
     'social_django',
-    'django_filters'
+    'django_filters',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -195,3 +196,11 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
 ]
 AUTH_EXTRA_ARGUMENTS = {'hd': 'vitstudent.ac.in'}
 SITE_ID = 1
+#Celery
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_CACHE_BACKEND = 'default'
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Kolkata'
