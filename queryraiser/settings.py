@@ -33,7 +33,6 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'cloudinary_storage',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -49,7 +48,7 @@ INSTALLED_APPS = [
     'social_django',
     'django_filters',
     'django_celery_results',
-    'cloudinary',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -137,11 +136,11 @@ STATIC_ROOT = os.path.join(BASE_DIR,'static')
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR/'media'# or any prefix you choose
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 STATICFILES_DIRS = [
     BASE_DIR / 'queryraiser/static',
 ]
-STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
+
 #Media
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -223,12 +222,15 @@ EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = env.int('EMAIL_PORT')
 DEFAULT_FROM_EMAIL = 'PR Team VIT Chennai <noreply@queryraiser.com>'
 #Storages
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': env.str('CLOUD_NAME'),
-    'API_KEY': env.str('API_KEY'),
-    'API_SECRET': env.str('API_SECRET')
-}
 CSRF_TRUSTED_ORIGINS = [
     'https://queryraiservitc.azurewebsites.net'
 ]
-TINYMCE_JS_URL = "https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js";
+DEFAULT_FILE_STORAGE = 'services.custom_azure.AzureMediaStorage'
+STATICFILES_STORAGE = 'services.custom_azure.AzureStaticStorage'
+STATIC_LOCATION = "static"
+MEDIA_LOCATION = "media"
+AZURE_ACCOUNT_NAME = env.str("ACCOUNT_NAME")
+AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
+STATIC_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
+MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
+
