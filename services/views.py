@@ -34,9 +34,9 @@ def home(request):
         return redirect("profile",slug = request.user.profile.slug)
     else:
         if is_program_representative(request.user):
-            queries = queries = Query.objects.filter(department = request.user.profile.department,admitted_year = request.user.profile.admitted_year).order_by('-date_of_creation','status')
+            queries =  BiasedQueryFilter(request.GET,queryset = Query.objects.filter(department = request.user.profile.department,admitted_year = request.user.profile.admitted_year,).order_by('-date_of_creation'))
         else:
-            queries = Query.objects.filter(Q(status = "Pending Approval")|Q(status = "Approved"),user = request.user).order_by('-date_of_creation')
+            queries = BiasedQueryFilter(request.GET,Query.objects.filter(user = request.user).order_by('-date_of_creation'))
         return render(request,"services/home.html",{"Queries":queries})
 
 def create_query(request):
@@ -111,4 +111,7 @@ def view_all_queries(request):
         queries = QueryFilter(request.GET,queryset = Query.objects.all().order_by('-date_of_creation'))
     else:
         queries = QueryFilter(request.GET,queryset = Query.objects.filter(user = request.user).order_by('-date_of_creation'))
-    return render(request,'services/view_all_queries.html',{"Queries":queries})
+    pending_count = Query.objects.filter(status = "Pending Approval").count()
+    approved_count = Query.objects.filter(status = "Approved").count()
+    rejected_count = Query.objects.filter(status = "Rejected").count()
+    return render(request,'services/view_all_queries.html',{"Queries":queries,"Pending_Count":pending_count,"Approved_Count":approved_count,"Rejected_Count":rejected_count})

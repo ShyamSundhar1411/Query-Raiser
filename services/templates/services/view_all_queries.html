@@ -26,45 +26,61 @@
                 {% endif %}
             </div>
             <div class = "d-inline-block py-2" style = "margin-bottom:15px;">
-                <button type = "submit" class = "btn btn-primary">Filter</button>
+                <button type = "submit" class = "btn btn-primary"><i class="fa-solid fa-filter"></i> Filter</button>
             </div>
         </form>
     </div>
-    <ul class="list-group">
-        {% if Queries.qs %}
-        {% for query in Queries.qs %}
-        {% if query.status == "Pending Approval" %}
-            <a href = "{% url 'query_detail_view' query.slug query.id %}" class="list-group-item list-group-item-action list-group-item-info">
-                {% if user.profile.role == "Program Representative" %}
-                {{query.title}} - {{query.department}} -  {{query.admitted_year}}
-                {% else %}
-                {{query.title}}
-                {% endif %}
-            </a>
-        {% elif query.status == "Rejected" %}
-            <a href = "{% url 'query_detail_view' query.slug query.id %}" class="list-group-item list-group-item-action list-group-item-danger">
-                {% if user.profile.role == "Program Representative" %}
-                    {{query.title}} - {{query.department}} - {{query.admitted_year}}
-                {% else %}
+    <div class = "row" style = "margin-bottom:10px;">
+        <div class = "col">
+            <span class = "badge bg-info">Pending for Approval : {{Pending_Count}}</span>
+        </div>
+        <div class = "col">
+            <span class = "badge bg-success">Approved : {{Approved_Count}}</span>
+        </div>
+        <div class = "col">
+            <span class = "badge bg-danger">Rejected : {{Rejected_Count}}</span>
+        </div>
+    </div>
+    <div class = "container">
+        <h1 class = "text-center" >Queries</h1>
+        <hr/>
+        <ul class="list-group">
+            {% if Queries.qs %}
+            {% for query in Queries.qs %}
+            {% if query.status == "Pending Approval" %}
+                <a href = "{% url 'query_detail_view' query.slug query.id %}" class="list-group-item list-group-item-action list-group-item-info">
+                    {% if user.profile.role == "Program Representative" %}
+                    {{query.title}} - {{query.department}} -  {{query.admitted_year}}
+                    {% else %}
                     {{query.title}}
-                {% endif %}
-            </a>
-        {% else %}
-            <a href = "{% url 'query_detail_view' query.slug  query.id %}" class="list-group-item list-group-item-action list-group-item-success">
-                {% if user.profile.role == "Program Representative" %}
-                {{query.title}} - {{query.department}} - {{query.admitted_year}}
-                {% else %}
-                {{query.title}}
-                {% endif %}
-            </a>
-        {% endif %}
-        {% endfor %}
-        {% else %}
-            <h1 class = "text-center">No Results Found !!!</h1>
-        {% endif %}
-    </ul>
+                    {% endif %}
+                </a>
+            {% elif query.status == "Rejected" %}
+                <a href = "{% url 'query_detail_view' query.slug query.id %}" class="list-group-item list-group-item-action list-group-item-danger">
+                    {% if user.profile.role == "Program Representative" %}
+                        {{query.title}} - {{query.department}} - {{query.admitted_year}}
+                    {% else %}
+                        {{query.title}}
+                    {% endif %}
+                </a>
+            {% else %}
+                <a href = "{% url 'query_detail_view' query.slug  query.id %}" class="list-group-item list-group-item-action list-group-item-success">
+                    {% if user.profile.role == "Program Representative" %}
+                    {{query.title}} - {{query.department}} - {{query.admitted_year}}
+                    {% else %}
+                    {{query.title}}
+                    {% endif %}
+                </a>
+            {% endif %}
+            {% endfor %}
+            {% else %}
+                <h1 class = "text-center">No Results Found !!!</h1>
+            {% endif %}
+        </ul>
+    </div>
     <div class = "d-inline-block py-2" style = "margin-top:20px;margin-bottom:10px;">
         <a href = "{% url 'create_query' %}" class = "btn btn-primary" data-bss-hover-animate="pulse"><i class="fa-solid fa-plus"></i> Add a Query</a>
+        <a href = "{% url 'portal' %}" class = "btn btn-primary" data-bss-hover-animate="pulse"><i class="fa-solid fa-house-user"></i> Dashboard</a>
     </div>
 </div>
 {% endblock %}

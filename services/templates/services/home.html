@@ -1,43 +1,69 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load crispy_forms_tags %}
 <div class = "container">
     <h1 class = "text-center">Your Queries</h1>
     <hr/>
-    <ul class="list-group">
-        {% if Queries %}
-        {% for query in Queries.all %}
-        {% if query.status == "Pending Approval" %}
-            <a href = "{% url 'query_detail_view' query.slug query.id %}" class="list-group-item list-group-item-action list-group-item-info">
-                {% if user.profile.role == "Program Representative" %}
-                {{query.title}} - {{query.department}} -  {{query.admitted_year}}
-                {% else %}
-                {{query.title}}
-                {% endif %}
-            </a>
-        {% elif query.status == "Rejected" %}
-            <a href = "{% url 'query_detail_view' query.slug query.id %}" class="list-group-item list-group-item-action list-group-item-danger">
-                {% if user.profile.role == "Program Representative" %}
-                    {{query.title}} - {{query.department}} - {{query.admitted_year}}
-                {% else %}
+    <div class = "container py-2" style = "margin-bottom:20px;">
+        <form method = "GET">
+            <div class = "row">
+                <div class = "col">
+                    {{Queries.form.date_of_creation|as_crispy_field}}
+                </div>
+                <div class = "col">
+                    {{Queries.form.status|as_crispy_field}}
+                </div>
+            </div>
+            <div class = "d-inline-block py-2" style = "margin-bottom:15px;">
+                <button type = "submit" class = "btn btn-primary"><i class="fa-solid fa-filter"></i> Filter</button>
+            </div>
+        </form>
+    </div>
+    <div class = "container">
+        <div class = "col" style = "margin-bottom:20px;">
+            <span class = "badge bg-primary">Query Count : {{Queries.qs.count}}</span>
+        </div>
+        <ul class="list-group">
+            {% if Queries.qs %}
+            {% for query in Queries.qs %}
+            {% if query.status == "Pending Approval" %}
+                <a href = "{% url 'query_detail_view' query.slug query.id %}" class="list-group-item list-group-item-action list-group-item-info">
+                    {% if user.profile.role == "Program Representative" %}
+                    {{query.title}} - {{query.department}} -  {{query.admitted_year}}
+                    {% else %}
                     {{query.title}}
-                {% endif %}
-            </a>
-        {% else %}
-            <a href = "{% url 'query_detail_view' query.slug  query.id %}" class="list-group-item list-group-item-action list-group-item-success">
+                    {% endif %}
+                </a>
+            {% elif query.status == "Rejected" %}
+                <a href = "{% url 'query_detail_view' query.slug query.id %}" class="list-group-item list-group-item-action list-group-item-danger">
+                    {% if user.profile.role == "Program Representative" %}
+                        {{query.title}} - {{query.department}} - {{query.admitted_year}}
+                    {% else %}
+                        {{query.title}}
+                    {% endif %}
+                </a>
+            {% else %}
+                <a href = "{% url 'query_detail_view' query.slug  query.id %}" class="list-group-item list-group-item-action list-group-item-success">
+                    {% if user.profile.role == "Program Representative" %}
+                    {{query.title}} - {{query.department}} - {{query.admitted_year}}
+                    {% else %}
+                    {{query.title}}
+                    {% endif %}
+                </a>
+            {% endif %}
+            {% endfor %}
+            {% else %}
                 {% if user.profile.role == "Program Representative" %}
-                {{query.title}} - {{query.department}} - {{query.admitted_year}}
+                    <h1 class = "text-center">You have No Queries unattended !!!</h1>
                 {% else %}
-                {{query.title}}
+                    <h1 class = "text-center">You have No Queries Posted !!!. Get Started</h1>
                 {% endif %}
-            </a>
-        {% endif %}
-        {% endfor %}
-        {% else %}
-            <h1 class = "text-center">You have No Queries Posted !!!. Get Started</h1>
-        {% endif %}
-    </ul>
+            {% endif %}
+        </ul>
+    </div>
     <div class = "d-inline-block py-2" style = "margin-top:20px;margin-bottom:10px;">
         <a href = "{% url 'create_query' %}" class = "btn btn-primary" data-bss-hover-animate="pulse"><i class="fa-solid fa-plus"></i> Add a Query</a>
+        <a href = "{% url 'view_all_queries' %}" class = "btn btn-primary" data-bss-hover-animate="pulse"><i class="fa-solid fa-eye"></i> View your Queries</a>
     </div>
 </div>
 {% endblock %}

@@ -7,4 +7,10 @@ class QueryFilter(django_filters.FilterSet):
     class Meta:
         model = Query
         fields = ['department','status']
-        
+class BiasedQueryFilter(django_filters.FilterSet):
+    title = django_filters.CharFilter(lookup_expr="icontains")
+    date_of_creation = django_filters.DateRangeFilter(label = 'Date')
+    admitted_year = django_filters.CharFilter(lookup_expr="icontains")
+    class Meta:
+        model = Query
+        fields = ['status']
