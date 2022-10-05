@@ -112,9 +112,12 @@ def profile(request,slug):
 def view_all_queries(request):
     if is_program_representative(request.user):
         queries = QueryFilter(request.GET,queryset = Query.objects.all().order_by('-date_of_creation'))
+        pending_count = Query.objects.filter(status = "Pending Approval").count()
+        approved_count = Query.objects.filter(status = "Approved").count()
+        rejected_count = Query.objects.filter(status = "Rejected").count()
     else:
         queries = QueryFilter(request.GET,queryset = Query.objects.filter(user = request.user).order_by('-date_of_creation'))
-    pending_count = Query.objects.filter(status = "Pending Approval").count()
-    approved_count = Query.objects.filter(status = "Approved").count()
-    rejected_count = Query.objects.filter(status = "Rejected").count()
+        pending_count = Query.objects.filter(status = "Pending Approval",user = request.user).count()
+        approved_count = Query.objects.filter(status = "Approved",user = request.user).count()
+        rejected_count = Query.objects.filter(status = "Rejected",user = request.user).count()
     return render(request,'services/view_all_queries.html',{"Queries":queries,"Pending_Count":pending_count,"Approved_Count":approved_count,"Rejected_Count":rejected_count})
