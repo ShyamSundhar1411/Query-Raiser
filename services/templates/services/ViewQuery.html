@@ -82,7 +82,39 @@
           </div>
         </div>
     {% endif %}
-  
+    {% else %}
+      {% if program_representative != None %}
+        <div class="dropdown" style = "margin-bottom:20px;">
+          
+          <a
+            class="dropdown-toggle text-decoration-none btn border border-primary"
+            type="button"
+            id="dropdownMenuButton1"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <i class="fa-regular fa-address-card"></i> Contact Your PR
+          </a>
+          <ul
+            class="dropdown-menu dropdown-content"
+            aria-labelledby="dropdownMenuButton1"
+          >
+            <li>
+              <a
+                class="dropdown-item"
+                href="https://wa.me/{{program_representative.contact|cut:' '}}"
+                target="_blank"
+                ><i class="fa-brands fa-whatsapp"></i> Whatsapp</a
+              >
+            </li>
+            <li>
+              <a class="dropdown-item" href="mailto:{{program_representative.user.email}}"
+                ><i class="fa-solid fa-envelope"></i> Mail</a
+              >
+            </li>
+          </ul>
+        </div>
+      {% endif %}
   {% endif %}
   <div class="container">
     <a

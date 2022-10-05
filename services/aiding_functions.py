@@ -1,4 +1,6 @@
 from . choices import DEPARTMENT_CHOICES
+from django.contrib.auth.models import User
+
 def department_finder(roll_no):
     department = ''
     for i in roll_no:

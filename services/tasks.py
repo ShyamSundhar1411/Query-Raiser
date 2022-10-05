@@ -1,6 +1,6 @@
 from celery import shared_task
 from django.core.mail import EmailMessage,send_mail
-from queryraiser.local_settings import DEFAULT_FROM_EMAIL as me
+from queryraiser.settings import DEFAULT_FROM_EMAIL as me
 @shared_task(bind=True)
 def approval_mail(self,query):
     email = query.user.email

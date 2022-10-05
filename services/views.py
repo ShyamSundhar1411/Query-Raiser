@@ -24,6 +24,10 @@ class QueryDetailView(LoginRequiredMixin,generic.DetailView):
         if  (query.user == self.request.user) or (is_program_representative(self.request.user)):
             return query
         raise Http404
+    def get_context_data(self, **kwargs):
+        context = super(QueryDetailView, self).get_context_data(**kwargs)
+        context['program_representative'] = Profile.objects.get(role = "Program Representative",department = self.request.user.profile.department,admitted_year = self.request.user.profile.admitted_year)
+        return context
 #Function Based Views
 def landing_page(request):
     if request.user.is_authenticated:
@@ -110,6 +114,7 @@ def profile(request,slug):
         return render(request,'account/profile.html',{'user_form':user_form,'profile_form':profile_form})
 @login_required
 def view_all_queries(request):
+    program_representative = None
     if is_program_representative(request.user):
         queries = QueryFilter(request.GET,queryset = Query.objects.all().order_by('-date_of_creation'))
         pending_count = Query.objects.filter(status = "Pending Approval").count()
@@ -117,7 +122,8 @@ def view_all_queries(request):
         rejected_count = Query.objects.filter(status = "Rejected").count()
     else:
         queries = QueryFilter(request.GET,queryset = Query.objects.filter(user = request.user).order_by('-date_of_creation'))
+        
         pending_count = Query.objects.filter(status = "Pending Approval",user = request.user).count()
         approved_count = Query.objects.filter(status = "Approved",user = request.user).count()
         rejected_count = Query.objects.filter(status = "Rejected",user = request.user).count()
-    return render(request,'services/view_all_queries.html',{"Queries":queries,"Pending_Count":pending_count,"Approved_Count":approved_count,"Rejected_Count":rejected_count})
+    return render(request,'services/view_all_queries.html',{"Queries":queries,"Pending_Count":pending_count,"Approved_Count":approved_count,"Rejected_Count":rejected_count,})
