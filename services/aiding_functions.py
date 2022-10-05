@@ -11,6 +11,6 @@ def department_finder(roll_no):
 def admitted_year_finder(roll_no):
     return "AY - "+roll_no[:2]
 def is_program_representative(user):
-    if user.profile.role == "Program Representative":
+    if user.profile.role == "Program Representative" or user.profile.role=="Head of Department":
         return True
     return False

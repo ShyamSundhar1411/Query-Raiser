@@ -16,7 +16,7 @@
                 <div class = "col">
                     {{Queries.form.status|as_crispy_field}}
                 </div>
-                {% if user.profile.role == "Program Representative" %}
+                {% if user.profile.role == "Program Representative" or user.profile.role == "Head of Department" %}
                 <div class = "col">
                     {{Queries.form.department|as_crispy_field}}
                 </div>
@@ -49,7 +49,7 @@
             {% for query in Queries.qs %}
             {% if query.status == "Pending Approval" %}
                 <a href = "{% url 'query_detail_view' query.slug query.id %}" class="list-group-item list-group-item-action list-group-item-info">
-                    {% if user.profile.role == "Program Representative" %}
+                    {% if user.profile.role == "Program Representative" or user.profile.role == "Head of Department" %}
                     {{query.title}} - {{query.department}} -  {{query.admitted_year}}
                     {% else %}
                     {{query.title}}
@@ -57,7 +57,7 @@
                 </a>
             {% elif query.status == "Rejected" %}
                 <a href = "{% url 'query_detail_view' query.slug query.id %}" class="list-group-item list-group-item-action list-group-item-danger">
-                    {% if user.profile.role == "Program Representative" %}
+                    {% if user.profile.role == "Program Representative" or user.profile.role == "Head of Department" %}
                         {{query.title}} - {{query.department}} - {{query.admitted_year}}
                     {% else %}
                         {{query.title}}
@@ -65,7 +65,7 @@
                 </a>
             {% else %}
                 <a href = "{% url 'query_detail_view' query.slug  query.id %}" class="list-group-item list-group-item-action list-group-item-success">
-                    {% if user.profile.role == "Program Representative" %}
+                    {% if user.profile.role == "Program Representative" or user.profile.role == "Head of Department" %}
                     {{query.title}} - {{query.department}} - {{query.admitted_year}}
                     {% else %}
                     {{query.title}}

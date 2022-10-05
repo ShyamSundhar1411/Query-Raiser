@@ -15,4 +15,5 @@ DEPARTMENT_CHOICES = [
 ROLE_CHOICES = [
     ("Program Representative","Program Representative"),
     ("Student","Student"),
+    ("Head of Department","Head of Department")
 ]

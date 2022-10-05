@@ -16,7 +16,7 @@
     </div>
     <div class="subtitle text-muted py-1">Type : {{query.type}}</div>
     <div class="subtitle text-muted py-1">Status : {{query.status}}</div>
-    {% if user.profile.role == "Program Representative" %}
+    {% if user.profile.role == "Program Representative" or user.profile.role == "Head of Department" %}
     <div class="subtitle text-muted py-1">
       Contact : {{query.user.profile.contact}}
     </div>
@@ -24,7 +24,7 @@
     <div class="subtitle text-muted py-1 text-center">Description</div>
     <p>{{query.description.media}} {{query.description|safe}}</p>
   </div>
-  {% if user.profile.role == "Program Representative" %}
+  {% if user.profile.role == "Program Representative" or user.profile.role == "Head of Department" %}
     {% if user.profile.department != query.department or user.profile.admitted_year != query.admitted_year %}
       <h6 class = "text-center text-muted">*You Do Not have permissions to make changes to this query. Kindly Contact {{query.department}} - {{query.admitted_year}} PR for further actions</h6>
       {% else%}

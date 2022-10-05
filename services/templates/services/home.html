@@ -36,7 +36,7 @@
                 </a>
             {% elif query.status == "Rejected" %}
                 <a href = "{% url 'query_detail_view' query.slug query.id %}" class="list-group-item list-group-item-action list-group-item-danger">
-                    {% if user.profile.role == "Program Representative" %}
+                    {% if user.profile.role == "Program Representative" or user.profile.role == "Head of Department" %}
                         {{query.title}} - {{query.department}} - {{query.admitted_year}}
                     {% else %}
                         {{query.title}}
@@ -44,7 +44,7 @@
                 </a>
             {% else %}
                 <a href = "{% url 'query_detail_view' query.slug  query.id %}" class="list-group-item list-group-item-action list-group-item-success">
-                    {% if user.profile.role == "Program Representative" %}
+                    {% if user.profile.role == "Program Representative" or user.profile.role == "Head of Department" %}
                     {{query.title}} - {{query.department}} - {{query.admitted_year}}
                     {% else %}
                     {{query.title}}
@@ -53,7 +53,7 @@
             {% endif %}
             {% endfor %}
             {% else %}
-                {% if user.profile.role == "Program Representative" %}
+            {% if user.profile.role == "Program Representative" or user.profile.role == "Head of Department" %}
                     <h1 class = "text-center">You have No Queries unattended !!!</h1>
                 {% else %}
                     <h1 class = "text-center">You have No Queries Posted !!!. Get Started</h1>
