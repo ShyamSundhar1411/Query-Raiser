@@ -11,10 +11,11 @@ from django.http.response import Http404, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render,redirect
 from . aiding_functions import admitted_year_finder, is_program_representative
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 #Class Based Views
-class QueryDetailView(generic.DetailView):
+class QueryDetailView(LoginRequiredMixin,generic.DetailView):
     model = Query
     template_name = "services/ViewQuery.html"
     fields = ['title','description','date_of_creation','user','type','department']
@@ -38,7 +39,7 @@ def home(request):
         else:
             queries = BiasedQueryFilter(request.GET,Query.objects.filter(user = request.user).order_by('-date_of_creation'))
         return render(request,"services/home.html",{"Queries":queries})
-
+@login_required
 def create_query(request):
     if request.user.profile.contact == None or request.user.profile.department == None:
         messages.info(request,"Verify your profile by adding your contact before posting the query")
@@ -58,7 +59,7 @@ def create_query(request):
             return render(request,"services/create_query.html",{"form":query_form,"hostride_form_errors":query_form.errors})
     else:
         return render(request,"services/create_query.html",{"form":QueryCreateForm()})
-
+@login_required
 def approve_query(request,pk,slug):
     query = Query.objects.get(id = pk,slug = slug)
     if request.method == "POST" and is_program_representative(request.user):
@@ -70,6 +71,7 @@ def approve_query(request,pk,slug):
     else:
         messages.error(request,"Error Processing Request")
         return redirect("query_detail_view",pk = pk,slug = slug)
+@login_required
 def reject_query(request,pk,slug):
     query = Query.objects.get(id = pk,slug = slug)
     if request.method == "POST" and is_program_representative(request.user):
@@ -106,6 +108,7 @@ def profile(request,slug):
         user_form = UserForm(instance = request.user)
         profile_form = ProfileForm(instance = request.user.profile)
         return render(request,'account/profile.html',{'user_form':user_form,'profile_form':profile_form})
+@login_required
 def view_all_queries(request):
     if is_program_representative(request.user):
         queries = QueryFilter(request.GET,queryset = Query.objects.all().order_by('-date_of_creation'))
