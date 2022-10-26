@@ -54,7 +54,7 @@ def create_query(request):
         messages.info(request,"Verify your profile by adding your contact before posting the query")
         return redirect("profile",slug=request.user.profile.slug)
     query_count = Query.objects.filter(user = request.user,status = "Pending Approval",date_of_creation__date =  date.today()).count()
-    if query_count >=2:
+    if query_count >=3:
         messages.info(request,"You are given a one-day query cooldown due to stacked up pending queries. Your query's timer will be reset. tommorrow")
         return redirect("home")
     if request.method == "POST":
