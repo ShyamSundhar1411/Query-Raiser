@@ -47,6 +47,8 @@ def home(request):
         else:
             queries = BiasedQueryFilter(request.GET,Query.objects.filter(user = request.user).order_by('-date_of_creation'))
         return render(request,"services/home.html",{"Queries":queries})
+def handler_not_found(request,exception):
+    return render(request,'services/404.html')
 @login_required
 @user_passes_test(lambda user:user.profile.department != 'Unauthorized' or user.profile.department != 'Unauthorized')
 def create_query(request):

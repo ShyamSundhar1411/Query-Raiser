@@ -19,7 +19,7 @@ from django.conf.urls.static import static
 from django.urls import path,include
 from services import views
 from django.contrib.auth import views as auth_views
-
+handler404 = "services.views.handler_not_found"
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.landing_page,name = "home"),
