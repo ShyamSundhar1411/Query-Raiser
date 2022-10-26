@@ -4,13 +4,14 @@ from . models import *
 from . forms import *
 from . filters import *
 from . tasks import *
+from datetime import date
 from django.db.models import Q
 from django.contrib import messages
 from django.views import generic
 from django.http.response import Http404, HttpResponse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,user_passes_test
 from django.shortcuts import get_object_or_404, render,redirect
-from . aiding_functions import admitted_year_finder, is_program_representative
+from . aiding_functions import admitted_year_finder, email_checker, email_parser, is_program_representative
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
@@ -37,6 +38,9 @@ def home(request):
     if request.user.profile.department == None or request.user.profile.contact == None:
         messages.info(request,"Verify your account by adding Contact Number before proceeding to the portal")
         return redirect("profile",slug = request.user.profile.slug)
+    if request.user.profile.role == 'Unauthorized':
+        messages.error(request,"Your account is not authorized by the system. Kindly contact the administrator")
+        return redirect("profile",slug = request.user.profile.slug)
     else:
         if is_program_representative(request.user):
             queries =  BiasedQueryFilter(request.GET,queryset = Query.objects.filter(department = request.user.profile.department,admitted_year = request.user.profile.admitted_year,).order_by('-date_of_creation'))
@@ -44,10 +48,15 @@ def home(request):
             queries = BiasedQueryFilter(request.GET,Query.objects.filter(user = request.user).order_by('-date_of_creation'))
         return render(request,"services/home.html",{"Queries":queries})
 @login_required
+@user_passes_test(lambda user:user.profile.department != 'Unauthorized' or user.profile.department != 'Unauthorized')
 def create_query(request):
     if request.user.profile.contact == None or request.user.profile.department == None:
         messages.info(request,"Verify your profile by adding your contact before posting the query")
         return redirect("profile",slug=request.user.profile.slug)
+    query_count = Query.objects.filter(user = request.user,status = "Pending Approval",date_of_creation__date =  date.today()).count()
+    if query_count >=2:
+        messages.info(request,"You are given a one-day query cooldown due to stacked up pending queries. Your query's timer will be reset. tommorrow")
+        return redirect("home")
     if request.method == "POST":
         query_form = QueryCreateForm(request.POST)
         if query_form.is_valid():
@@ -64,6 +73,7 @@ def create_query(request):
     else:
         return render(request,"services/create_query.html",{"form":QueryCreateForm()})
 @login_required
+@user_passes_test(lambda user:user.profile.department != 'Unauthorized' or user.profile.department != 'Unauthorized')
 def approve_query(request,pk,slug):
     query = Query.objects.get(id = pk,slug = slug)
     if request.method == "POST" and is_program_representative(request.user):
@@ -76,6 +86,7 @@ def approve_query(request,pk,slug):
         messages.error(request,"Error Processing Request")
         return redirect("query_detail_view",pk = pk,slug = slug)
 @login_required
+@user_passes_test(lambda user:user.profile.department != 'Unauthorized' or user.profile.department != 'Unauthorized')
 def reject_query(request,pk,slug):
     query = Query.objects.get(id = pk,slug = slug)
     if request.method == "POST" and is_program_representative(request.user):
@@ -95,10 +106,19 @@ def profile(request,slug):
         if user_form.is_valid() and profile_form.is_valid():
             if(request.user.profile.department == ""):
                 profile_form_copy = profile_form.save(commit = False)
-                department = department_finder(request.user.last_name)
-                admitted_year = admitted_year_finder(request.user.last_name)
-                profile_form_copy.department = department
-                profile_form_copy.admitted_year = admitted_year
+                if email_checker(request.user.email):
+                    organization = email_parser(request.user.email)
+                    if organization == 'vitstudent.ac.in':
+                        profile_form_copy.role = 'Student'
+                        department = department_finder(request.user.last_name)
+                        admitted_year = admitted_year_finder(request.user.last_name)
+                        profile_form_copy.department = department
+                        profile_form_copy.admitted_year = admitted_year
+                    else:
+                        profile_form_copy.role = 'Head of Department'
+                else:
+                    profile_form_copy.role = 'Unauthorized'
+                    profile_form_copy.department = "Unauthorized"
                 user_form.save()
                 profile_form_copy.save()
             else:
@@ -113,6 +133,7 @@ def profile(request,slug):
         profile_form = ProfileForm(instance = request.user.profile)
         return render(request,'account/profile.html',{'user_form':user_form,'profile_form':profile_form})
 @login_required
+@user_passes_test(lambda user:user.profile.department != 'Unauthorized' or user.profile.department != 'Unauthorized')
 def view_all_queries(request):
     program_representative = None
     if is_program_representative(request.user):

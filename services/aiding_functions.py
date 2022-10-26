@@ -16,3 +16,11 @@ def is_program_representative(user):
     if user.profile.role == "Program Representative" or user.profile.role=="Head of Department":
         return True
     return False
+def email_checker(email):
+    email_splitted = email.split('@')
+    if email_splitted[-1] in ['vit.ac.in','vitstudent.ac.in']:
+        return True
+    return False
+def email_parser(email):
+    email_splitted = email.split('@')
+    return email_splitted[-1]
