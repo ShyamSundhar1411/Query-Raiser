@@ -83,7 +83,7 @@
         </div>
     {% endif %}
     {% else %}
-      {% if program_representative != None %}
+      {% if program_representatives != None %}
         <div class="dropdown" style = "margin-bottom:20px;">
           
           <a
@@ -95,25 +95,29 @@
           >
             <i class="fa-regular fa-address-card"></i> Contact Your PR
           </a>
+          
           <ul
             class="dropdown-menu dropdown-content"
             aria-labelledby="dropdownMenuButton1"
           >
+          {% for program_representative in program_representatives %}
             <li>
               <a
                 class="dropdown-item"
                 href="https://wa.me/{{program_representative.contact|cut:' '}}"
                 target="_blank"
-                ><i class="fa-brands fa-whatsapp"></i> Whatsapp</a
+                ><i class="fa-brands fa-whatsapp"></i> {{program_representative.user.first_name}} - Whatsapp</a
               >
             </li>
             <li>
               <a class="dropdown-item" href="mailto:{{program_representative.user.email}}"
-                ><i class="fa-solid fa-envelope"></i> Mail</a
+                ><i class="fa-solid fa-envelope"></i> {{program_representative.user.first_name}} -  Mail</a
               >
             </li>
+            {% endfor %}
           </ul>
         </div>
+        
       {% endif %}
   {% endif %}
   <div class="container">

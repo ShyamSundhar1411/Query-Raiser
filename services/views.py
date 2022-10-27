@@ -27,7 +27,7 @@ class QueryDetailView(LoginRequiredMixin,generic.DetailView):
         raise Http404
     def get_context_data(self, **kwargs):
         context = super(QueryDetailView, self).get_context_data(**kwargs)
-        context['program_representative'] = Profile.objects.get(role = "Program Representative",department = self.request.user.profile.department,admitted_year = self.request.user.profile.admitted_year)
+        context['program_representatives'] = Profile.objects.filter(role = "Program Representative",department = self.request.user.profile.department,admitted_year = self.request.user.profile.admitted_year)
         return context
 #Function Based Views
 def landing_page(request):
