@@ -11,11 +11,17 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from phonenumber_field.modelfields import PhoneNumberField
 # Create your models here.
+class Department(models.Model):
+    department_name = models.CharField(max_length = 100)
+    department_id = models.CharField(max_length = 100)
+    department_school = models.CharField(max_length = 100,choices = SCHOOL_CHOICES)
+    def __str__(self):
+        return self.department_name+' - '+self.department_id
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     contact = PhoneNumberField(blank = True)
     role = models.CharField(max_length = 100,choices = ROLE_CHOICES,blank = True, null=True)
-    department = models.CharField(max_length = 500,choices = DEPARTMENT_CHOICES,null=True)
+    department = models.OneToOneField(Department,on_delete=models.CASCADE,null = True)
     admitted_year = models.CharField(max_length = 500,null=True)
     slug = models.SlugField(blank=True)
     def __str__(self):
@@ -24,6 +30,8 @@ class Profile(models.Model):
         if not self.slug:
             self.slug = uuid.uuid4()
         super(Profile, self).save(*args,**kwargs)
+
+    
 class Query(models.Model):
     user = models.ForeignKey(User,on_delete = models.CASCADE)
     title = models.CharField(max_length = 100)

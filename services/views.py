@@ -106,13 +106,13 @@ def profile(request,slug):
         user_form = UserForm(request.POST,instance = request.user)
         profile_form = ProfileForm(request.POST,request.FILES,instance = request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
-            if(request.user.profile.department == ""):
+            if not request.user.profile.department:
                 profile_form_copy = profile_form.save(commit = False)
                 if email_checker(request.user.email):
                     organization = email_parser(request.user.email)
                     if organization == 'vitstudent.ac.in':
                         profile_form_copy.role = 'Student'
-                        department = department_finder(request.user.last_name)
+                        department = Department.objects.get(departmentId = department_finder(request.user.last_name))
                         admitted_year = admitted_year_finder(request.user.last_name)
                         profile_form_copy.department = department
                         profile_form_copy.admitted_year = admitted_year
@@ -120,7 +120,7 @@ def profile(request,slug):
                         profile_form_copy.role = 'Head of Department'
                 else:
                     profile_form_copy.role = 'Unauthorized'
-                    profile_form_copy.department = "Unauthorized"
+                    profile_form_copy.department = Department.objects.get(department_name = "Unauthorized")
                 user_form.save()
                 profile_form_copy.save()
             else:

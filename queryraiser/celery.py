@@ -1,9 +1,9 @@
 import os
 from celery import Celery
-from .settings import INSTALLED_APPS
+from .local_settings import INSTALLED_APPS
 
 # set the default Django settings module for the 'celery' program.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'queryraiser.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'queryraiser.local_settings')
 
 app = Celery('queryraiser')
 
