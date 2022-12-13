@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django_filters',
     'django_celery_results',
     'storages',
+    'import_export'
 ]
 
 MIDDLEWARE = [
