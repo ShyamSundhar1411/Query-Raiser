@@ -18,7 +18,7 @@ class UserForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     contact = PhoneNumberField(required = True)
     role = forms.CharField(disabled=True)
-    department = forms.CharField(disabled=True,required=False)    
+    department = forms.ModelChoiceField(queryset=Department.objects.all(),disabled=True,required=False)    
     admitted_year = forms.CharField(disabled=True,required=False) 
     class Meta:
         model = Profile

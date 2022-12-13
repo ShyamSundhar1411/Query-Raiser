@@ -16,7 +16,7 @@ class Department(models.Model):
     department_id = models.CharField(max_length = 100)
     department_school = models.CharField(max_length = 100,choices = SCHOOL_CHOICES)
     def __str__(self):
-        return self.department_name+' - '+self.department_id
+        return self.department_name
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     contact = PhoneNumberField(blank = True)
@@ -47,7 +47,7 @@ class Query(models.Model):
 @receiver(post_save,sender = User)
 def create_profile(sender,instance,created,**kwargs):
     if created:
-        Profile.objects.create(user = instance,role = "Unauthorized")
+        Profile.objects.create(user = instance,role = "Unauthorized",department = None)
         instance.profile.save()
 @receiver(post_save, sender = User)
 def save_profile(sender, instance, **kwargs):

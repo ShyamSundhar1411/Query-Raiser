@@ -88,7 +88,7 @@ def approve_query(request,pk,slug):
         messages.error(request,"Error Processing Request")
         return redirect("query_detail_view",pk = pk,slug = slug)
 @login_required
-@user_passes_test(lambda user:user.profile.department != 'Unauthorized' or user.profile.department != 'Unauthorized')
+@user_passes_test(lambda user:user.profile.department_name != 'Unauthorized' or user.profile.department_name != 'Unauthorized')
 def reject_query(request,pk,slug):
     query = Query.objects.get(id = pk,slug = slug)
     if request.method == "POST" and is_program_representative(request.user):
@@ -106,13 +106,13 @@ def profile(request,slug):
         user_form = UserForm(request.POST,instance = request.user)
         profile_form = ProfileForm(request.POST,request.FILES,instance = request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
-            if not request.user.profile.department:
+            if request.user.profile.department == None:
                 profile_form_copy = profile_form.save(commit = False)
                 if email_checker(request.user.email):
                     organization = email_parser(request.user.email)
                     if organization == 'vitstudent.ac.in':
                         profile_form_copy.role = 'Student'
-                        department = Department.objects.get(departmentId = department_finder(request.user.last_name))
+                        department = Department.objects.get(department_id = department_finder(request.user.last_name))
                         admitted_year = admitted_year_finder(request.user.last_name)
                         profile_form_copy.department = department
                         profile_form_copy.admitted_year = admitted_year
@@ -135,7 +135,7 @@ def profile(request,slug):
         profile_form = ProfileForm(instance = request.user.profile)
         return render(request,'account/profile.html',{'user_form':user_form,'profile_form':profile_form})
 @login_required
-@user_passes_test(lambda user:user.profile.department != 'Unauthorized' or user.profile.department != 'Unauthorized')
+@user_passes_test(lambda user:user.profile.department.department_name != 'Unauthorized')
 def view_all_queries(request):
     program_representative = None
     if is_program_representative(request.user):

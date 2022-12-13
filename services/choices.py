@@ -30,5 +30,6 @@ SCHOOL_CHOICES = [
     ('VITBS','VIT Business School-VITBS'),
     ('VITSOL','VIT School of Law-VITSOL'),
     ('VFIT','VIT Fashion Institute of Technology-VFIT'),
-    ('Other Organization','Other Organization')
+    ('Other Organization','Other Organization'),
+    ('Unauthorized','Unauthorized'),
 ]
