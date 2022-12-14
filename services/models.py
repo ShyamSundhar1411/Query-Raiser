@@ -21,7 +21,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     contact = PhoneNumberField(blank = True)
     role = models.CharField(max_length = 100,choices = ROLE_CHOICES,blank = True, null=True)
-    department = models.OneToOneField(Department,on_delete=models.CASCADE,null = True)
+    department = models.ForeignKey(Department,on_delete=models.CASCADE,null = True)
     admitted_year = models.CharField(max_length = 500,null=True)
     slug = models.SlugField(blank=True)
     def __str__(self):
@@ -38,7 +38,7 @@ class Query(models.Model):
     date_of_creation = models.DateTimeField(auto_now = True)
     status = models.CharField(max_length = 200,choices = STATUS_CHOICES)
     description = HTMLField()
-    department = models.CharField(max_length = 200,choices = DEPARTMENT_CHOICES)
+    department = models.ForeignKey(Department,on_delete = models.CASCADE)
     admitted_year = models.CharField(max_length = 200)
     type = models.CharField(max_length = 100)
     slug = AutoSlugField(populate_from = "title",unique=True,blank = True,editable = True)
