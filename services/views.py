@@ -88,7 +88,7 @@ def approve_query(request,pk,slug):
         messages.error(request,"Error Processing Request")
         return redirect("query_detail_view",pk = pk,slug = slug)
 @login_required
-@user_passes_test(lambda user:user.profile.department_name != 'Unauthorized' or user.profile.department_name != 'Unauthorized')
+@user_passes_test(lambda user:user.profile.department != 'Unauthorized' or user.profile.department != 'Unauthorized')
 def reject_query(request,pk,slug):
     query = Query.objects.get(id = pk,slug = slug)
     if request.method == "POST" and is_program_representative(request.user):
